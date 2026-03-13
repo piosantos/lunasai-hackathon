@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "http://0.0.0.0:8080/:path*",
+        destination: "https://lunasai-hackathon.onrender.com/:path*",
       },
     ]
   },
