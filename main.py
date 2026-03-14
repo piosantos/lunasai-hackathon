@@ -753,7 +753,13 @@ async def checkout_start(payload: CheckoutStartRequest, response: Response) -> d
         samesite="lax",
         max_age=7200,
     )
-    return {"checkout_url": checkout_url}
+    payment_link = checkout_url
+    print(f"DEBUG: Returning payment_url: {payment_link}")
+    return {
+        "status": "success",
+        "payment_url": payment_link,
+        "checkout_url": payment_link,
+    }
 
 
 @router.get("/checkout/status")
