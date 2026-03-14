@@ -75,6 +75,10 @@ async def _call_mayar(endpoint: str, payload: dict[str, Any]) -> dict[str, Any]:
 
     url = endpoint if endpoint.startswith("http") else f"https://api.mayar.id{endpoint}"
 
+    if "/hl/v1/payment/create" in url:
+        payload.setdefault("customerEmail", "pembeli@lunasai.com")
+        payload.setdefault("customerMobile", "081234567890")
+
     # Validate amount for Mayar contracts (IDR minimum commonly enforced).
     if "amount" in payload:
         try:
