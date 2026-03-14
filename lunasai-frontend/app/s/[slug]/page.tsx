@@ -134,6 +134,21 @@ export default function StorefrontPreviewPage({ params }: { params: Promise<{ sl
         throw new Error('Checkout start failed.');
       }
 
+      const data = (await response.json()) as {
+        payment_url?: string;
+        checkout_url?: string;
+      };
+
+      if (data.payment_url) {
+        window.location.href = data.payment_url;
+        return;
+      }
+
+      if (data.checkout_url) {
+        window.location.href = data.checkout_url;
+        return;
+      }
+
       window.location.href = '/wait';
     } catch {
       setErrorMessage('Unable to start checkout. Please try again.');
