@@ -75,10 +75,6 @@ async def _call_mayar(endpoint: str, payload: dict[str, Any]) -> dict[str, Any]:
 
     url = endpoint if endpoint.startswith("http") else f"https://api.mayar.id{endpoint}"
 
-    if "/hl/v1/payment/create" in url:
-        payload.setdefault("customerEmail", "pembeli@lunasai.com")
-        payload.setdefault("customerMobile", "081234567890")
-
     # Validate amount for Mayar contracts (IDR minimum commonly enforced).
     if "amount" in payload:
         try:
@@ -95,10 +91,21 @@ async def _call_mayar(endpoint: str, payload: dict[str, Any]) -> dict[str, Any]:
             )
         payload["amount"] = parsed_amount
 
+    if "/hl/v1/payment/create" in url:
+        product_name = str(payload.get("name", "LunasAI Checkout"))
+        amount = int(payload.get("amount", 0))
+        description = str(payload.get("description", "LunasAI digital product checkout"))
+        payload = {
+            "name": product_name,
+            "amount": amount,
+            "description": description,
+            "email": "customer@lunasai.com",
+            "mobile": "081234567890",
+        }
+
     safe_payload = dict(payload)
-    safe_payload.pop("customerEmail", None)
-    safe_payload.pop("customerName", None)
-    safe_payload.pop("customerMobile", None)
+    safe_payload.pop("email", None)
+    safe_payload.pop("mobile", None)
     print(f"Mayar request url={url} payload={safe_payload}")
 
     try:
